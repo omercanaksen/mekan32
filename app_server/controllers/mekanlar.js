@@ -4,7 +4,7 @@ var apiSecenekleri = {
   apiYolu: '/api/mekanlar/'
 }
 var istekSecenekleri
-var footer = "Ömercan Akşen 2021"
+var footer = "Ömercan Akşen 2021 "
 var mesafeyiFormatla = function (mesafe) {
   var yeniMesafe, birim;
   if (mesafe> 1000) {

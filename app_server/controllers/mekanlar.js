@@ -1,22 +1,22 @@
 var request = require('postman-request');
 var apiSecenekleri = {
   sunucu: "https://omercanaksen1611012023.herokuapp.com",
-  apiYolu: '/api/mekanlar'
+  apiYolu: '/api/mekanlar/'
 }
 var istekSecenekleri
+var footer = "Ömercan Akşen 2021"
 var mesafeyiFormatla = function (mesafe) {
   var yeniMesafe, birim;
-  if (mesafe > 1000) {
-    yeniMesafe = parseFloat(mesafe / 1000).toFixed(2);
-    birim = 'km';
+  if (mesafe> 1000) {
+    yeniMesafe = parseFloat(mesafe/1000).toFixed(1);
+    birim = ' km';
   }
   else {
     yeniMesafe = parseFloat(mesafe).toFixed(1);
-    birim = 'm';
+    birim = ' m';
   }
   return yeniMesafe + birim;
 }
-var footer = "Ömercan Akşen"
 var anaSayfaOlustur = function (req, res, cevap, mekanListesi) {
   var mesaj;
   if (!(mekanListesi instanceof Array)) {
@@ -80,19 +80,19 @@ var detaySayfasiOlustur = function (req, res, mekanDetaylari) {
 }
 
 var hataGoster = function (req, res, durum) {
-  var baslik, icerik;
-  if (durum == 404) {
-    baslik = "404, Sayfa Bulunamadı!";
-    icerik = "Kusura bakma sayfayı bulamadık!"
+  var baslik,icerik;
+  if (durum==404){
+    baslik="404, Sayfa Bulunamadı!";
+    icerik="Kusura bakma sayfayı bulamadık!"
   }
   else {
-    baslik = durum + ", Birşeyler ters gitti!";
-    icerik = "Ters giden bir şeyler var!";
+    baslik=durum+", Birşeyler ters gitti!";
+    icerik="Ters giden bir şeyler var!";
   }
   res.status(durum);
   res.render('hata', {
-    baslik: baslik,
-    icerik: icerik
+    baslik:baslik,
+    icerik:icerik
   });
 };
 var mekanBilgisiGetir = function (req, res, callback) {
@@ -129,7 +129,7 @@ const mekanBilgisi = function (req, res) {
     function (hata, cevap, mekanDetaylari) {
       var gelenMekan = mekanDetaylari;
 
-      if (cevap.statusCode = 200) {
+      if (cevap.statusCode == 200) {
         gelenMekan.koordinatlar = {
           enlem: mekanDetaylari.koordinatlar[0],
           boylam: mekanDetaylari.koordinatlar[1]
@@ -150,7 +150,7 @@ var yorumSayfasiOlustur = function (req, res, mekanBilgisi) {
   });
 };
 
-const yorumEkle = function (req, res) {
+const yorumEkle=function(req,res) {
   mekanBilgisiGetir(req, res, function (req, res, cevap) {
     yorumSayfasiOlustur(req, res, cevap);
   });
@@ -165,7 +165,7 @@ const yorumumuEkle = function (req, res) {
     yorumMetni: req.body.review,
   };
   istekSecenekleri = {
-    url: apiSecenekleri.sunucu + apiSecenekleri.apiYolu + mekanid + "/yorumlar",
+    url: apiSecenekleri.sunucu + apiSecenekleri.apiYolu + mekanid + '/yorumlar',
     method: "POST",
     json: gonderilenYorum,
   };
@@ -174,17 +174,17 @@ const yorumumuEkle = function (req, res) {
     !gonderilenYorum.puan ||
     !gonderilenYorum.yorumMetni
   ) {
-    res.redirect("/mekan/" + mekanid + "/yorum/yeni?hata=evet");
+    res.redirect('/mekan/' + mekanid + '/yorum/yeni?hata=evet');
   } else {
     request(istekSecenekleri, function (hata, cevap, body) {
       if (cevap.statusCode === 201) {
-        res.redirect("/mekan/" + mekanid);
+        res.redirect('/mekan/' + mekanid);
       } else if (
         cevap.statusCode === 400 &&
         body.name &&
         body.name === "ValidationError"
       ) {
-        res.redirect("/mekan/" + mekanid + "/yorum/yeni?hata=evet");
+        res.redirect('/mekan/' + mekanid + '/yorum/yeni?hata=evet');
       } else {
         hataGoster(req, res, cevap.statusCode);
       }

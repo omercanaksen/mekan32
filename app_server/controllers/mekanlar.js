@@ -1,7 +1,7 @@
 var request = require('postman-request');
 var apiSecenekleri = {
   sunucu: "https://omercanaksen1611012023.herokuapp.com",
-  apiYolu: '/api/mekanlar/'
+  apiYolu: '/api/mekanlar'
 }
 var istekSecenekleri
 var mesafeyiFormatla = function (mesafe) {
